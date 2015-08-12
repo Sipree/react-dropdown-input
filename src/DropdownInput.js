@@ -115,7 +115,7 @@ var DropdownInput = React.createClass({
         </DropdownMenu>);
     }
     var value = this.state.value;
-    if(value == "") {
+    if(value === '') {
       value = this.props.defaultValue;
     }
     return (
@@ -133,7 +133,7 @@ var DropdownInput = React.createClass({
           navItem={null}
           pullRight={null}
           onSelect={null}
-          defaultvalue ={this.props.defaultvalue}
+          defaultvalue ={this.props.defaultValue}
           isParentControlled={false}
           onChange={this.handleInputChange}
           onKeyDown={this.handleKeyDown}

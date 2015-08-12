@@ -52,6 +52,7 @@ var DropdownInput = React.createClass({
     pullRight: React.PropTypes.bool,
     dropup: React.PropTypes.bool,
     defaultValue: React.PropTypes.string,
+    key: React.PropTypes.string,
     menuClassName: React.PropTypes.string,
     max: React.PropTypes.number,
     maxText: React.PropTypes.string,
@@ -120,6 +121,10 @@ var DropdownInput = React.createClass({
         maxMenuItem
       );
     }
+    var value = this.state.value;
+    if (value === "") {
+      value = this.props.defaultValue;
+    }
     return React.createElement(
       "div",
       { className: joinClasses(this.props.className, cx(classes)) },
@@ -130,15 +135,17 @@ var DropdownInput = React.createClass({
         bsSize: this.props.bsSize,
         ref: "dropdownInput",
         onClick: this.handleDropdownClick,
-        key: 0,
+        key: this.props.id,
         navDropdown: this.props.navItem,
         navItem: null,
         pullRight: null,
         onSelect: null,
+        defaultvalue: this.props.defaultValue,
+        isParentControlled: false,
         onChange: this.handleInputChange,
         onKeyDown: this.handleKeyDown,
         dropup: null,
-        value: this.state.value })),
+        value: value })),
       dropdown
     );
   },
@@ -223,7 +230,10 @@ var DropdownInput = React.createClass({
         this.sendChange({ value: newName });
         this.setState({ value: newName, activeIndex: -1 });
         break;
-
+      default:
+        newName = this.state.value;
+        this.sendChange({ value: newName });
+        break;
     }
   },
 
@@ -241,7 +251,7 @@ var DropdownInput = React.createClass({
   handleOptionSelect: function handleOptionSelect(key, name) {
     // the user clicked on a dropdown menu item
     this.setDropdownState(false);
-    this.sendSelect({ value: name, index: this.state.activeIndex });
+    this.sendSelect({ value: name, index: this.state.activeIndex, id: this.props.id });
     this.sendChange({ value: name });
     this.setState({ value: name, activeIndex: -1 });
   },
