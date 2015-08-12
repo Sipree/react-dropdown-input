@@ -163,7 +163,7 @@ var DropdownInput = React.createClass({
     }
 
     var isParentControlled = (this.props.hasOwnProperty("isParentControlled") ) ? this.props.isParentControlled: false;
-
+    var value = (isParentControlled) ? this.props.defaultValue : this.state.value;
 
     return (
       <div className={joinClasses(this.props.className, cx(classes))}>
@@ -186,7 +186,7 @@ var DropdownInput = React.createClass({
           onChange={this.handleInputChange}
           onKeyDown={this.handleKeyDown}
           dropup={null}
-          value={this.state.value} />
+          value={value} />
         {dropdown}
       </div>
     );
@@ -221,7 +221,7 @@ var DropdownInput = React.createClass({
     this.setState({value: e.target.value, activeIndex: -1});
     this.setDropdownState(true);
     // fire the supplied onChange event.
-    this.sendChange({value: e.target.value});
+    //this.sendChange({value: e.target.value});
   },
 
   handleKeyDown: function(e) {
