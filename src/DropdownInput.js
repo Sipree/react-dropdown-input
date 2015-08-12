@@ -112,8 +112,6 @@ var DropdownInput = React.createClass({
 
     if (newName.trim().length > 0) {
       this.sendSelect({value: newName, index: newIndex, id: this.props.id});
-      console.log("newName");
-      console.log(newName);
       this.sendChange({value: newName, id: this.props.id });
       this.setState({value: newName, activeIndex: newIndex});
     }
@@ -230,12 +228,12 @@ var DropdownInput = React.createClass({
     this.setState({value: e.target.value, activeIndex: -1});
     this.setDropdownState(true);
     // fire the supplied onChange event.
-    //this.sendChange({value: e.target.value});
+    //this.sendChange({value: e.target.value, id: this.props.id});
   },
 
   handleKeyDown: function(e) {
     // catch arrow keys and the Enter key
-    var filteredOptions = this.filteredOptions();
+    var filteredOptions = this.filteredOptionss();
     var numOptions = this.cappedLength(filteredOptions);
     var newName;
     switch(e.keyCode){
@@ -260,7 +258,7 @@ var DropdownInput = React.createClass({
         break;
       //default:
       //  newName = this.state.value;
-      //  this.sendChange({value: newName});
+      //  this.sendChange({value: newName, id: this.props.id});
       //  break;
     }
   },
@@ -280,14 +278,15 @@ var DropdownInput = React.createClass({
     // the user clicked on a dropdown menu item
     this.setDropdownState(false);
     this.sendSelect({value: name, index: this.state.activeIndex, id: this.props.id});
-    this.sendChange({value: name});
+    this.sendChange({value: name, index: this.state.activeIndex, id: this.props.id});
     this.setState({value: name, activeIndex: -1});
   },
 
-  sendChange: function(e) {
+  sendChange: function(val) {
     if (this.props.onChange) {
-      this.props.onChange(e);
+      this.props.onChange(val);
     }
+    this.props.defaultValue = val.value;
   },
 
   sendSelect: function(e) {
