@@ -111,6 +111,9 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
     }
 
     if (newName.trim().length > 0) {
+	  if(this.props.isParentControlled) {
+	    this.props.defaultValue = newName;
+	  }
       this.sendSelect({value: newName, index: newIndex, id: this.props.id});
       this.sendChange({value: newName, id: this.props.id });
       this.setState({value: newName, activeIndex: newIndex});
@@ -128,11 +131,15 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
   handleOnBlur: function(event) {
     if(!this.props.customValuesAllowed) {
       if(this.state.activeIndex == -1) {
+		  if(this.props.isParentControlled) {
+			  this.props.defaultValue = "";
+		  }
         this.setState({value: ""});
       }//nothing selected
-    } else {
-      this.selectNewOption();
-    }
+    } 
+	//else {
+     // this.selectNewOption();
+    //}
     if(typeof(this.props.onBlur) !== "undefined" && this.state.value.length > 0) {
       this.props.onBlur(event);
     }
@@ -227,13 +234,16 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
     // the user changed the input text
     this.setState({value: e.target.value, activeIndex: -1});
     this.setDropdownState(true);
+  	if(this.props.isParentControlled) {
+	  this.props.defaultValue =e.target.value;
+  	}
     // fire the supplied onChange event.
     //this.sendChange({value: e.target.value, id: this.props.id});
   },
 
   handleKeyDown: function(e) {
     // catch arrow keys and the Enter key
-    var filteredOptions = this.filteredOptionss();
+    var filteredOptions = this.filteredOptions();
     var numOptions = this.cappedLength(filteredOptions);
     var newName;
     switch(e.keyCode){
@@ -276,6 +286,9 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
 
   handleOptionSelect: function(key, name) {
     // the user clicked on a dropdown menu item
+	if(this.props.isParentControlled) {
+		this.props.defaultValue = name;
+	}
     this.setDropdownState(false);
     this.sendSelect({value: name, index: this.state.activeIndex, id: this.props.id});
     this.sendChange({value: name, index: this.state.activeIndex, id: this.props.id});
@@ -286,13 +299,18 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
     if (this.props.onChange) {
       this.props.onChange(val);
     }
-    this.props.defaultValue = val.value;
+	if(this.props.isParentControlled) {
+    	this.props.defaultValue = val.value;
+	}
   },
 
-  sendSelect: function(e) {
+  sendSelect: function(val) {
     if (this.props.onSelect) {
-      this.props.onSelect(e);
+      this.props.onSelect(val);
     }
+	if(this.props.isParentControlled) {
+    	this.props.defaultValue = val.value;
+	}
   }
 
 
