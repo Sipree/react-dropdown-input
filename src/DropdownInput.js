@@ -47,17 +47,20 @@ var DropdownInput = React.createClass({
     pullRight: React.PropTypes.bool,
     dropup: React.PropTypes.bool,
     defaultValue: React.PropTypes.string,
-	key: React.PropTypes.string,
+	key: React.PropTypes.any,
     menuClassName: React.PropTypes.string,
     max: React.PropTypes.number,
     maxText: React.PropTypes.string,
     onChange: React.PropTypes.func,
+    onBlur: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
     filter: React.PropTypes.func,
     // the rest are to make eslint happy
     id: React.PropTypes.string,
+    isParentControlled: React.PropTypes.bool,
+    customValuesAllowed: React.PropTypes.bool,
     className: React.PropTypes.string,
     bsSize: React.PropTypes.string
   },
@@ -74,6 +77,39 @@ var DropdownInput = React.createClass({
     return this.props.options.filter(filter.bind(undefined, this.state.value));
   },
 
+  selectNewOption: function()
+  {
+    var filteredOptions = this.filteredOptions();
+    var numOptions = this.cappedLength(filteredOptions);
+    var newName;
+    var newIndex = caseInsensIndexOf(this.props.options, this.state.value); // may need this
+    if (this.state.activeIndex >= 0 && this.state.activeIndex < numOptions) {
+      newIndex = this.state.activeIndex;
+      newName = genGet(filteredOptions, this.state.activeIndex);
+      this.setDropdownState(false);
+    } else if (this.state.activeIndex === -1 && newIndex >= 0) {
+      newName = genGet(this.props.options, newIndex);
+      this.setDropdownState(false);
+    } else if(numOptions > 0 && this.state.value.length > 0) {
+      newIndex = 0;//get first index
+      newName = filteredOptions[0];
+      this.setDropdownState(false);
+    }
+    else {
+      newIndex = this.state.activeIndex;
+      newName = this.state.value;
+      this.setDropdownState(false);
+    }
+
+    if (newName.trim().length > 0) {
+      this.sendSelect({value: newName, index: newIndex, id: this.props.id});
+      console.log("newName");
+      console.log(newName);
+      this.sendChange({value: newName, id: this.props.id });
+      this.setState({value: newName, activeIndex: newIndex});
+    }
+  },
+
   cappedLength: function(options) {
     var total = genLength(options);
     if (total>this.props.max) {
@@ -82,7 +118,18 @@ var DropdownInput = React.createClass({
     }
     return total;
   },
-
+  handleOnBlur: function(event) {
+    if(!this.props.customValuesAllowed) {
+      if(this.state.activeIndex == -1) {
+        this.setState({value: ""});
+      }//nothing selected
+    } else {
+      this.selectNewOption();
+    }
+    if(typeof(this.props.onBlur) !== "undefined" && this.state.value.length > 0) {
+      this.props.onBlur(event);
+    }
+  },
   render: function () {
     var classes = {
         'dropdown': true,
@@ -114,10 +161,10 @@ var DropdownInput = React.createClass({
           {maxMenuItem}
         </DropdownMenu>);
     }
-    var value = this.state.value;
-    if(value === '') {
-      value = this.props.defaultValue;
-    }
+
+    var isParentControlled = (this.props.hasOwnProperty("isParentControlled") ) ? this.props.isParentControlled: false;
+
+
     return (
       <div className={joinClasses(this.props.className, cx(classes))}>
         <Input
@@ -128,17 +175,18 @@ var DropdownInput = React.createClass({
           bsSize={this.props.bsSize}
           ref="dropdownInput"
           onClick={this.handleDropdownClick}
+          onBlur={this.handleOnBlur}
           key={this.props.id}
           navDropdown={this.props.navItem}
           navItem={null}
           pullRight={null}
           onSelect={null}
           defaultvalue ={this.props.defaultValue}
-          isParentControlled={false}
+          isParentControlled={isParentControlled}
           onChange={this.handleInputChange}
           onKeyDown={this.handleKeyDown}
           dropup={null}
-          value={value} />
+          value={this.state.value} />
         {dropdown}
       </div>
     );
@@ -196,29 +244,15 @@ var DropdownInput = React.createClass({
         break;
 
       case 13: // enter
-        var newIndex = caseInsensIndexOf(this.props.options, this.state.value);  // may need this
-        if (this.state.open) {
-          e.preventDefault();
-        }
-        if (this.state.activeIndex >= 0 && this.state.activeIndex < numOptions) {
-          newIndex = this.state.activeIndex;
-          newName = genGet(filteredOptions, this.state.activeIndex);
-          this.setDropdownState(false);
-        } else if (this.state.activeIndex === -1 && newIndex >= 0) {
-          newName = genGet(this.props.options, newIndex);
-          this.setDropdownState(false);
-        } else {
-          newIndex = this.state.activeIndex;
-          newName = this.state.value;
-        }
-        this.sendSelect({value: newName, index: newIndex});
-        this.sendChange({value: newName});
-        this.setState({value: newName, activeIndex: -1});
+        this.selectNewOption();
         break;
-      default:
-        newName = this.state.value;
-        this.sendChange({value: newName});
+      case 9: // tab
+        this.selectNewOption();
         break;
+      //default:
+      //  newName = this.state.value;
+      //  this.sendChange({value: newName});
+      //  break;
     }
   },
 
