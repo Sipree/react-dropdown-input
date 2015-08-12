@@ -71,10 +71,19 @@ var DropdownInput = React.createClass({displayName: "DropdownInput",
       activeIndex: -1
     };
   },
-
+  uniqueArray: function(arr) {
+    var u = {}, a = [];
+    for(var i = 0, l = arr.length; i < l; ++i){
+      if(!u.hasOwnProperty(arr[i])) {
+        a.push(arr[i]);
+        u[arr[i]] = 1;
+      }
+    }
+    return a;
+  },
   filteredOptions: function() {
     var filter = this.props.filter || defaultFilter;
-    return this.props.options.filter(filter.bind(undefined, this.state.value));
+	return this.uniqueArray(this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
   },
 
   selectNewOption: function()
