@@ -6,13 +6,11 @@
 
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var joinClasses = require('react/lib/joinClasses');
 var cx = require('classnames');
 
-var BootstrapMixin = ReactBootstrap.BootstrapMixin;
-var DropdownStateMixin = ReactBootstrap.DropdownStateMixin;
 var DropdownMenu = ReactBootstrap.DropdownMenu;
 var Input = ReactBootstrap.Input;
 var MenuItem = ReactBootstrap.MenuItem;
@@ -41,8 +39,6 @@ var caseInsensIndexOf = function(list, str) {
 
 var DropdownInput = React.createClass({
 
-  mixins: [BootstrapMixin, DropdownStateMixin],
-
   propTypes: {
     pullRight: React.PropTypes.bool,
     dropup: React.PropTypes.bool,
@@ -68,7 +64,8 @@ var DropdownInput = React.createClass({
   getInitialState: function () {
     return {
       value: this.props.defaultValue || '',
-      activeIndex: -1
+      activeIndex: -1,
+      open: false
     };
   },
   uniqueArray: function(arr) {
@@ -84,6 +81,10 @@ var DropdownInput = React.createClass({
   filteredOptions: function() {
     var filter = this.props.filter || defaultFilter;
 	return this.uniqueArray(this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
+  },
+
+  setDropdownState: function(state) {
+    this.setState({open: state });
   },
 
   selectNewOption: function()
@@ -167,6 +168,7 @@ var DropdownInput = React.createClass({
           aria-labelledby={this.props.id}
           pullRight={this.props.pullRight}
           key={1}
+          open={this.state.open}
           onSelect={null}>
           {filteredOptions.map(this.renderAsMenuItem)}
           {maxMenuItem}

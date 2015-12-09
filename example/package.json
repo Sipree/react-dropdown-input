@@ -15,7 +15,7 @@
     "uglify-js": "^2.4.19"
   },
   "scripts": {
-    "build": "browserify src/js/*.js | uglifyjs -cm > bundle.min.js",
+    "build": "browserify src/js/*.js  > bundle.min.js",
     "test": "echo 'No tests yet' && exit 1"
   },
   "browserify": {

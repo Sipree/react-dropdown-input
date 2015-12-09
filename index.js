@@ -8,13 +8,11 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var React = require('react/addons');
+var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var joinClasses = require('react/lib/joinClasses');
 var cx = require('classnames');
 
-var BootstrapMixin = ReactBootstrap.BootstrapMixin;
-var DropdownStateMixin = ReactBootstrap.DropdownStateMixin;
 var DropdownMenu = ReactBootstrap.DropdownMenu;
 var Input = ReactBootstrap.Input;
 var MenuItem = ReactBootstrap.MenuItem;
@@ -46,8 +44,6 @@ var caseInsensIndexOf = function caseInsensIndexOf(list, str) {
 var DropdownInput = React.createClass({
   displayName: 'DropdownInput',
 
-  mixins: [BootstrapMixin, DropdownStateMixin],
-
   propTypes: {
     pullRight: React.PropTypes.bool,
     dropup: React.PropTypes.bool,
@@ -73,7 +69,8 @@ var DropdownInput = React.createClass({
   getInitialState: function getInitialState() {
     return {
       value: this.props.defaultValue || '',
-      activeIndex: -1
+      activeIndex: -1,
+      open: false
     };
   },
   uniqueArray: function uniqueArray(arr) {
@@ -90,6 +87,10 @@ var DropdownInput = React.createClass({
   filteredOptions: function filteredOptions() {
     var filter = this.props.filter || defaultFilter;
     return this.uniqueArray(this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
+  },
+
+  setDropdownState: function setDropdownState(state) {
+    this.setState({ open: state });
   },
 
   selectNewOption: function selectNewOption() {
@@ -146,6 +147,7 @@ var DropdownInput = React.createClass({
     }
   },
   render: function render() {
+    //debugger;
     var classes = {
       'dropdown': true,
       'open': this.state.open,
@@ -173,6 +175,7 @@ var DropdownInput = React.createClass({
           'aria-labelledby': this.props.id,
           pullRight: this.props.pullRight,
           key: 1,
+          open: this.state.open,
           onSelect: null },
         filteredOptions.map(this.renderAsMenuItem),
         maxMenuItem
