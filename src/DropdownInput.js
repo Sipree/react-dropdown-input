@@ -49,6 +49,7 @@ var DropdownInput = React.createClass({
     maxText: React.PropTypes.string,
     onChange: React.PropTypes.func,
     onBlur: React.PropTypes.func,
+    onClose: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
@@ -142,6 +143,12 @@ var DropdownInput = React.createClass({
       this.props.onBlur(event);
     }
   },
+  onClose: function(event) {
+    this.setState({open: false});
+    if(this.props.hasOwnProperty("onClose")) {
+      this.props.onClose(event);
+    }
+  },
   render: function () {
     var classes = {
         'dropdown': true,
@@ -168,6 +175,7 @@ var DropdownInput = React.createClass({
           aria-labelledby={this.props.id}
           pullRight={this.props.pullRight}
           key={1}
+          onClose={this.onClose}
           open={this.state.open}
           onSelect={null}>
           {filteredOptions.map(this.renderAsMenuItem)}
