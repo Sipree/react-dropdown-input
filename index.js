@@ -147,7 +147,6 @@ var DropdownInput = React.createClass({
     }
   },
   render: function render() {
-    //debugger;
     var classes = {
       'dropdown': true,
       'open': this.state.open,

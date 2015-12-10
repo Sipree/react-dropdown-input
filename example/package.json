@@ -6,7 +6,7 @@
   "main": "index.html",
   "dependencies": {
     "react": ">=0.13",
-    "react-bootstrap": ">=0.18.0",
+    "react-bootstrap": "git+https://github.com/Sipree/react-bootstrap.git#develop",
     "react-dropdown-input": "../"
   },
   "devDependencies": {

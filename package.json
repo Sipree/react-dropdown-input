@@ -7,7 +7,7 @@
   "dependencies": {
     "classnames": ">=1.1.4",
     "react": ">=0.12",
-    "react-bootstrap": ">=0.18.0",
+    "react-bootstrap": "git+https://github.com/Sipree/react-bootstrap.git#develop",
     "react-dom": ">=0.14.3"
   },
   "devDependencies": {
