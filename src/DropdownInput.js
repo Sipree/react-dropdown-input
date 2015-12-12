@@ -137,7 +137,7 @@ var DropdownInput = React.createClass({
         this.setState({value: ""});
       }//nothing selected
     } 
-    if(props.hasOwnProperty('onBlur')){
+    if(this.props.hasOwnProperty('onBlur')){
       this.props.onBlur(event);
     }
   },
