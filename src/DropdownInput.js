@@ -133,13 +133,11 @@ var DropdownInput = React.createClass({
   handleOnBlur: function(event) {
     if(!this.props.customValuesAllowed) {
       if(this.state.activeIndex == -1) {
-        if(this.props.isParentControlled) {
-            this.props.defaultValue = "";
-        }
+
         this.setState({value: ""});
       }//nothing selected
     } 
-    if(typeof(this.props.onBlur) !== "undefined") {
+    if(props.hasOwnProperty('onBlur')){
       this.props.onBlur(event);
     }
   },
