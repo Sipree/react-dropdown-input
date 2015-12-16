@@ -8,7 +8,7 @@
 
 var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
-var joinClasses = require('react/lib/joinClasses');
+var joinClasses = require('fbjs/lib/joinClasses');
 var cx = require('classnames');
 
 var DropdownMenu = ReactBootstrap.DropdownMenu;

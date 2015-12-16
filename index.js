@@ -4,20 +4,20 @@
 //  with a ReactBootstrap.DropdownMenu of possible options.
 //
 
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var React = require('react');
-var ReactBootstrap = require('react-bootstrap');
-var joinClasses = require('react/lib/joinClasses');
-var cx = require('classnames');
+var React = require("react");
+var ReactBootstrap = require("react-bootstrap");
+var joinClasses = require("fbjs/lib/joinClasses");
+var cx = require("classnames");
 
 var DropdownMenu = ReactBootstrap.DropdownMenu;
 var Input = ReactBootstrap.Input;
 var MenuItem = ReactBootstrap.MenuItem;
 
-var defaultMaxText = '+# more not shown';
+var defaultMaxText = "+# more not shown";
 
 var defaultFilter = function defaultFilter(filterText, optionName) {
   // also optionIndex as third arg
@@ -26,12 +26,12 @@ var defaultFilter = function defaultFilter(filterText, optionName) {
 
 var genLength = function genLength(list) {
   // deal with both regular arrays and immutablejs objects, which have .count() instead of length
-  return typeof list.count !== 'undefined' ? list.count() : list.length;
+  return typeof list.count !== "undefined" ? list.count() : list.length;
 };
 
 var genGet = function genGet(list, i) {
   // deal with both regular arrays and immutablejs objects, which have list.get(i) instead of list[i]
-  return typeof list.get !== 'undefined' ? list.get(i) : list[i];
+  return typeof list.get !== "undefined" ? list.get(i) : list[i];
 };
 
 var caseInsensIndexOf = function caseInsensIndexOf(list, str) {
@@ -42,7 +42,7 @@ var caseInsensIndexOf = function caseInsensIndexOf(list, str) {
 };
 
 var DropdownInput = React.createClass({
-  displayName: 'DropdownInput',
+  displayName: "DropdownInput",
 
   propTypes: {
     pullRight: React.PropTypes.bool,
@@ -70,7 +70,7 @@ var DropdownInput = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      value: this.props.defaultValue || '',
+      value: this.props.defaultValue || "",
       activeIndex: -1,
       open: false
     };
@@ -118,7 +118,7 @@ var DropdownInput = React.createClass({
     }
 
     if (newName.trim().length > 0) {
-      if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+      if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
         this.props.updateDefaultValue(newName);
       }
       this.sendSelect({ value: newName, index: newIndex, id: this.props.id });
@@ -138,13 +138,13 @@ var DropdownInput = React.createClass({
   handleOnBlur: function handleOnBlur(event) {
     if (!this.props.customValuesAllowed) {
       if (this.state.activeIndex == -1) {
-        if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+        if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
           this.props.updateDefaultValue("");
         }
         this.setState({ value: "" });
       } //nothing selected
     }
-    if (this.props.hasOwnProperty('onBlur')) {
+    if (this.props.hasOwnProperty("onBlur")) {
       this.props.onBlur(event);
     }
   },
@@ -156,20 +156,20 @@ var DropdownInput = React.createClass({
   },
   render: function render() {
     var classes = {
-      'dropdown': true,
-      'open': this.state.open,
-      'dropup': this.props.dropup
+      dropdown: true,
+      open: this.state.open,
+      dropup: this.props.dropup
     };
     // you can provide a filter prop, which is a function(filterText, optionName, optionIndex) which should
     // return true to show option with the given name and index, given the input filterText.
     var filteredOptions = this.filteredOptions();
     var numFiltered = genLength(filteredOptions);
     var maxMenuItem = null;
-    var maxText = typeof this.props.maxText === 'undefined' ? defaultMaxText : this.props.maxText;
+    var maxText = typeof this.props.maxText === "undefined" ? defaultMaxText : this.props.maxText;
     if (this.props.max && numFiltered > this.props.max) {
       // take an extra one off, to leave space for the maxText
       filteredOptions = filteredOptions.slice(0, this.props.max - 1);
-      maxText = maxText.replace('#', numFiltered - this.props.max + 1);
+      maxText = maxText.replace("#", numFiltered - this.props.max + 1);
       maxMenuItem = this.renderAsMenuItem(maxText, this.props.max, null, true);
     }
     var dropdown = null;
@@ -178,8 +178,8 @@ var DropdownInput = React.createClass({
         DropdownMenu,
         {
           className: this.props.menuClassName,
-          ref: 'menu',
-          'aria-labelledby': this.props.id,
+          ref: "menu",
+          "aria-labelledby": this.props.id,
           pullRight: this.props.pullRight,
           key: 1,
           onClose: this.onClose,
@@ -194,14 +194,14 @@ var DropdownInput = React.createClass({
     var value = isParentControlled ? this.props.defaultValue : this.state.value;
 
     return React.createElement(
-      'div',
+      "div",
       { className: joinClasses(this.props.className, cx(classes)) },
       React.createElement(Input, _extends({}, this.props, {
         menuClassName: null,
         options: null,
-        type: 'text',
+        type: "text",
         bsSize: this.props.bsSize,
-        ref: 'dropdownInput',
+        ref: "dropdownInput",
         onClick: this.handleDropdownClick,
         onBlur: this.handleOnBlur,
         key: this.props.id,
@@ -241,7 +241,7 @@ var DropdownInput = React.createClass({
         onMouseEnter: this.handleMouseEnter.bind(this, index) },
       part1,
       React.createElement(
-        'b',
+        "b",
         null,
         part2
       ),
@@ -253,7 +253,7 @@ var DropdownInput = React.createClass({
     // the user changed the input text
     this.setState({ value: e.target.value, activeIndex: -1 });
     this.setDropdownState(true);
-    if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+    if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
       this.props.updateDefaultValue(e.target.value);
     }
     // fire the supplied onChange event.
@@ -289,10 +289,10 @@ var DropdownInput = React.createClass({
         // tab
         this.selectNewOption();
         break;
-      //default:
-      //  newName = this.state.value;
-      //  this.sendChange({value: newName, id: this.props.id});
-      //  break;
+        //default:
+        //  newName = this.state.value;
+        //  this.sendChange({value: newName, id: this.props.id});
+        //  break;
     }
   },
 
@@ -309,7 +309,7 @@ var DropdownInput = React.createClass({
 
   handleOptionSelect: function handleOptionSelect(key, name) {
     // the user clicked on a dropdown menu item
-    if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+    if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
       this.props.updateDefaultValue(name);
     }
     this.setDropdownState(false);
@@ -322,7 +322,7 @@ var DropdownInput = React.createClass({
     if (this.props.onChange) {
       this.props.onChange(val);
     }
-    if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+    if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
       this.props.updateDefaultValue(val.value);
     }
   },
@@ -331,7 +331,7 @@ var DropdownInput = React.createClass({
     if (this.props.onSelect) {
       this.props.onSelect(val);
     }
-    if (this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+    if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
       this.props.updateDefaultValue(val.value);
     }
   }
