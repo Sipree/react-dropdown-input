@@ -52,6 +52,7 @@ var DropdownInput = React.createClass({
     onBlur: React.PropTypes.func,
     onClose: React.PropTypes.func,
     onSelect: React.PropTypes.func,
+    placeholderText: React.PropTypes.string,
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
     filter: React.PropTypes.func,
@@ -201,6 +202,7 @@ var DropdownInput = React.createClass({
           key={this.props.id}
           navDropdown={this.props.navItem}
           navItem={null}
+          placeholder={(this.props.hasOwnProperty('placeholderText')) ? this.props.placeholderText: ""}
           pullRight={null}
           onSelect={null}
           defaultvalue ={this.props.defaultValue}
