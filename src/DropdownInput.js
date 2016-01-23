@@ -51,6 +51,7 @@ var DropdownInput = React.createClass({
     onChange: React.PropTypes.func,
     onBlur: React.PropTypes.func,
     onClose: React.PropTypes.func,
+    onClick: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     placeholderText: React.PropTypes.string,
     navItem: React.PropTypes.bool,
@@ -147,7 +148,7 @@ var DropdownInput = React.createClass({
   },
   onClose: function(event) {
     this.setState({open: false});
-    if(this.props.hasOwnProperty("onClose")) {
+    if(this.props.hasOwnProperty('onClose')) {
       this.props.onClose(event);
     }
   },
@@ -290,7 +291,9 @@ var DropdownInput = React.createClass({
 
   handleDropdownClick: function (e) {
     e.preventDefault();
-
+    if(this.props.hasOwnProperty('onClick')) {
+        this.props.onClick(e);
+    }
     this.setDropdownState(!this.state.open);
   },
 
