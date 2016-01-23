@@ -307,7 +307,7 @@ var DropdownInput = React.createClass({
   handleDropdownClick: function handleDropdownClick(e) {
     e.preventDefault();
     if (this.props.hasOwnProperty("onClick")) {
-      this.props.onClick(e);
+        this.props.onClick(e);
     }
     this.setDropdownState(!this.state.open);
   },

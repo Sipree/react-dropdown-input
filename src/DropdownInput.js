@@ -148,7 +148,7 @@ var DropdownInput = React.createClass({
   },
   onClose: function(event) {
     this.setState({open: false});
-    if(this.props.hasOwnProperty("onClose")) {
+    if(this.props.hasOwnProperty('onClose')) {
       this.props.onClose(event);
     }
   },
