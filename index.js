@@ -61,13 +61,13 @@ var DropdownInput = React.createClass({
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
     filter: React.PropTypes.func,
+    retainDuplicates: React.PropTypes.bool,
     // the rest are to make eslint happy
     id: React.PropTypes.string,
     isParentControlled: React.PropTypes.bool,
     customValuesAllowed: React.PropTypes.bool,
     className: React.PropTypes.string,
-    bsSize: React.PropTypes.string,
-    retainDuplicateValues: React.PropTypes.bool
+    bsSize: React.PropTypes.string
   },
 
   getInitialState: function getInitialState() {
@@ -90,13 +90,14 @@ var DropdownInput = React.createClass({
   },
   filteredOptions: function filteredOptions() {
     var filter = this.props.filter || defaultFilter;
-    var filteredOptions = this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
-    if(this.props.retainDuplicateValues){
-      return (filteredOptions);
+    var optionsFiltered = this.props.options.filter(filter.bind(undefined, this.state.value.trim()));
+    if(this.props.retainDuplicates){
+      return optionsFiltered;
     } else {
-      return this.uniqueArray(filteredOptions);
+      return this.uniqueArray(optionsFiltered);
     }
   },
+
   setDropdownState: function setDropdownState(state) {
     this.setState({ open: state });
   },
