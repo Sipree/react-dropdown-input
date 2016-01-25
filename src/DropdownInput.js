@@ -44,25 +44,26 @@ var DropdownInput = React.createClass({
     dropup: React.PropTypes.bool,
     defaultValue: React.PropTypes.string,
     updateDefaultValue: React.PropTypes.func,
-	key: React.PropTypes.any,
+    key: React.PropTypes.any,
     menuClassName: React.PropTypes.string,
     max: React.PropTypes.number,
     maxText: React.PropTypes.string,
     onChange: React.PropTypes.func,
     onBlur: React.PropTypes.func,
     onClose: React.PropTypes.func,
+    onClick: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     placeholderText: React.PropTypes.string,
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
     filter: React.PropTypes.func,
+    retainDuplicates: React.PropTypes.bool,
     // the rest are to make eslint happy
     id: React.PropTypes.string,
     isParentControlled: React.PropTypes.bool,
     customValuesAllowed: React.PropTypes.bool,
     className: React.PropTypes.string,
-    bsSize: React.PropTypes.string,
-    retainDuplicateValues: React.PropTypes.bool
+    bsSize: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -82,15 +83,16 @@ var DropdownInput = React.createClass({
     }
     return a;
   },
-  filteredOptions: function filteredOptions() {
+  filteredOptions: function() {
     var filter = this.props.filter || defaultFilter;
-    var filteredOptions = this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
-    if(this.props.retainDuplicateValues){
-      return (filteredOptions);
+    var optionsFiltered = this.props.options.filter(filter.bind(undefined, this.state.value.trim()));
+    if(this.props.retainDuplicates){
+      return optionsFiltered;
     } else {
-      return this.uniqueArray(filteredOptions);
+      return this.uniqueArray(optionsFiltered);
     }
   },
+
   setDropdownState: function(state) {
     this.setState({open: state });
   },
@@ -152,7 +154,7 @@ var DropdownInput = React.createClass({
   },
   onClose: function(event) {
     this.setState({open: false});
-    if(this.props.hasOwnProperty("onClose")) {
+    if(this.props.hasOwnProperty('onClose')) {
       this.props.onClose(event);
     }
   },
@@ -192,7 +194,6 @@ var DropdownInput = React.createClass({
 
     var isParentControlled = (this.props.hasOwnProperty("isParentControlled") ) ? this.props.isParentControlled: false;
     var value = (isParentControlled) ? this.props.defaultValue : this.state.value;
-
     return (
       <div className={joinClasses(this.props.className, cx(classes))}>
         <Input
@@ -295,15 +296,17 @@ var DropdownInput = React.createClass({
 
   handleDropdownClick: function (e) {
     e.preventDefault();
-
+    if(this.props.hasOwnProperty('onClick')) {
+        this.props.onClick(e);
+    }
     this.setDropdownState(!this.state.open);
   },
 
   handleOptionSelect: function(key, name) {
     // the user clicked on a dropdown menu item
-	if(this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
-		this.props.updateDefaultValue(name);
-	}
+  if(this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
+    this.props.updateDefaultValue(name);
+  }
     this.setDropdownState(false);
     this.sendSelect({value: name, index: this.state.activeIndex, id: this.props.id});
     this.sendChange({value: name, index: this.state.activeIndex, id: this.props.id});
