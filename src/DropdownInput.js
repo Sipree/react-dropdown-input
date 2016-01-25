@@ -61,7 +61,8 @@ var DropdownInput = React.createClass({
     isParentControlled: React.PropTypes.bool,
     customValuesAllowed: React.PropTypes.bool,
     className: React.PropTypes.string,
-    bsSize: React.PropTypes.string
+    bsSize: React.PropTypes.string,
+    retainDuplicateValues: React.PropTypes.bool
   },
 
   getInitialState: function () {
@@ -81,11 +82,15 @@ var DropdownInput = React.createClass({
     }
     return a;
   },
-  filteredOptions: function() {
+  filteredOptions: function filteredOptions() {
     var filter = this.props.filter || defaultFilter;
-	return this.uniqueArray(this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
+    var filteredOptions = this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
+    if(this.props.retainDuplicateValues){
+      return (filteredOptions);
+    } else {
+      return this.uniqueArray(filteredOptions);
+    }
   },
-
   setDropdownState: function(state) {
     this.setState({open: state });
   },
