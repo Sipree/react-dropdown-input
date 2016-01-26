@@ -56,12 +56,12 @@ var DropdownInput = React.createClass({
     onChange: React.PropTypes.func,
     onBlur: React.PropTypes.func,
     onClose: React.PropTypes.func,
-    onClick: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     placeholderText: React.PropTypes.string,
     navItem: React.PropTypes.bool,
     options: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]).isRequired,
     filter: React.PropTypes.func,
+    retainDuplicates: React.PropTypes.bool,
     // the rest are to make eslint happy
     id: React.PropTypes.string,
     isParentControlled: React.PropTypes.bool,
@@ -90,7 +90,12 @@ var DropdownInput = React.createClass({
   },
   filteredOptions: function filteredOptions() {
     var filter = this.props.filter || defaultFilter;
-    return this.uniqueArray(this.props.options.filter(filter.bind(undefined, this.state.value.trim())));
+    var optionsFiltered = this.props.options.filter(filter.bind(undefined, this.state.value.trim()));
+    if(this.props.retainDuplicates){
+      return optionsFiltered;
+    } else {
+      return this.uniqueArray(optionsFiltered);
+    }
   },
 
   setDropdownState: function setDropdownState(state) {
@@ -306,9 +311,7 @@ var DropdownInput = React.createClass({
 
   handleDropdownClick: function handleDropdownClick(e) {
     e.preventDefault();
-    if (this.props.hasOwnProperty("onClick")) {
-        this.props.onClick(e);
-    }
+
     this.setDropdownState(!this.state.open);
   },
 
@@ -317,9 +320,10 @@ var DropdownInput = React.createClass({
     if (this.props.isParentControlled && this.props.hasOwnProperty("updateDefaultValue")) {
       this.props.updateDefaultValue(name);
     }
+    var filteredMenuState = this.filteredOptions();
     this.setDropdownState(false);
-    this.sendSelect({ value: name, index: this.state.activeIndex, id: this.props.id });
-    this.sendChange({ value: name, index: this.state.activeIndex, id: this.props.id });
+    this.sendSelect({ value: name, index: this.state.activeIndex, id: this.props.id, menuContext: filteredMenuState });
+    this.sendChange({ value: name, index: this.state.activeIndex, id: this.props.id, menuContext: filteredMenuState });
     this.setState({ value: name, activeIndex: -1 });
   },
 
