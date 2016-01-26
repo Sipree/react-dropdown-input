@@ -125,8 +125,8 @@ var DropdownInput = React.createClass({
       if(this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
         this.props.updateDefaultValue(newName);
       }
-      this.sendSelect({value: newName, index: newIndex, id: this.props.id});
-      this.sendChange({value: newName, id: this.props.id });
+      this.sendSelect({ value: newName, index: newIndex, id: this.props.id, menuContext: filteredOptions});
+      this.sendChange({ value: newName, id: this.props.id, menuContext: filteredOptions});
       this.setState({value: newName, activeIndex: newIndex});
     }
   },
