@@ -307,9 +307,10 @@ var DropdownInput = React.createClass({
   if(this.props.isParentControlled && this.props.hasOwnProperty('updateDefaultValue')) {
     this.props.updateDefaultValue(name);
   }
+    var filteredMenuState = this.filteredOptions();
     this.setDropdownState(false);
-    this.sendSelect({value: name, index: this.state.activeIndex, id: this.props.id});
-    this.sendChange({value: name, index: this.state.activeIndex, id: this.props.id});
+    this.sendSelect({value: name, index: this.state.activeIndex, id: this.props.id, menuContext: filteredMenuState});
+    this.sendChange({value: name, index: this.state.activeIndex, id: this.props.id, menuContext: filteredMenuState});
     this.setState({value: name, activeIndex: -1});
   },
 
